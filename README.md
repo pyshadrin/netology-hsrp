@@ -32,37 +32,40 @@
 
 ### Задание 2
 
-# cat /usr/local/bin/check_apache.sh
+```
+cat /usr/local/bin/check_apache.sh
+
 #!/bin/bash
 
-#Параметры для проверки
+# Параметры для проверки
 PORT=80
 CHECK_FILE="/var/www/html/index.html"
 TIMEOUT=3
 
-#Проверяем доступность порта
+# Проверяем доступность порта
 if ! nc -z -w $TIMEOUT localhost $PORT >/dev/null 2>&1; then
     echo "Port $PORT is not accessible"
     exit 1
 fi
 
-#Проверяем существование index.html
+# Проверяем существование index.html
 if [ ! -f "$CHECK_FILE" ]; then
     echo "File $CHECK_FILE does not exist"
     exit 1
 fi
 
-#Проверяем, что файл не пустой (опционально)
+# Проверяем, что файл не пустой (опционально)
 if [ ! -s "$CHECK_FILE" ]; then
     echo "File $CHECK_FILE is empty"
     exit 1
 fi
 
-#Если все проверки пройдены
+# Если все проверки пройдены
 exit 0
+```
 
 
-
+```
 # cat /etc/keepalived/keepalived.conf
 
 vrrp_script chk_apache {
@@ -91,18 +94,4 @@ vrrp_instance VI_1 {
 
 
 <img width="1585" height="812" alt="image" src="https://github.com/user-attachments/assets/da59c6b1-bd0c-40dc-8d86-5ae2f1f3d29c" />
-
-
----
-
-### Задание 3
-
-https://github.com/pyshadrin/gitlab-hw/network
-
----
-
-### Задание 4
-
-https://github.com/pyshadrin/gitlab-hw/network
-
----
+```
