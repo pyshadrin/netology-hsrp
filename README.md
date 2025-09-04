@@ -32,7 +32,66 @@
 
 ### Задание 2
 
-https://github.com/pyshadrin/gitlab-hw/commit/990a0715804c7c6a4614e5960084002724277c5f
+# cat /usr/local/bin/check_apache.sh
+#!/bin/bash
+
+#Параметры для проверки
+PORT=80
+CHECK_FILE="/var/www/html/index.html"
+TIMEOUT=3
+
+#Проверяем доступность порта
+if ! nc -z -w $TIMEOUT localhost $PORT >/dev/null 2>&1; then
+    echo "Port $PORT is not accessible"
+    exit 1
+fi
+
+#Проверяем существование index.html
+if [ ! -f "$CHECK_FILE" ]; then
+    echo "File $CHECK_FILE does not exist"
+    exit 1
+fi
+
+#Проверяем, что файл не пустой (опционально)
+if [ ! -s "$CHECK_FILE" ]; then
+    echo "File $CHECK_FILE is empty"
+    exit 1
+fi
+
+#Если все проверки пройдены
+exit 0
+
+
+
+# cat /etc/keepalived/keepalived.conf
+
+vrrp_script chk_apache {
+    script "/usr/local/bin/check_apache.sh"
+    interval 3  # проверка каждые 3 секунды
+    timeout 1    # таймаут выполнения скрипта
+    fall 2       # после 2 неудачных проверок сервер считается нерабочим
+    rise 2       # после 2 успешных проверок сервер считается рабочим
+}
+
+vrrp_instance VI_1 {
+        state MASTER
+        interface ens18
+        virtual_router_id 139
+        priority 255
+        advert_int 1
+
+        virtual_ipaddress {
+              10.1.1.139/24
+        }
+
+        track_script {
+        chk_apache  # отслеживаем состояние скрипта
+        }
+}
+
+
+<img width="1585" height="812" alt="image" src="https://github.com/user-attachments/assets/da59c6b1-bd0c-40dc-8d86-5ae2f1f3d29c" />
+
 
 ---
 
