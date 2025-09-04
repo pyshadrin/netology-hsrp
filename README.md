@@ -91,7 +91,7 @@ vrrp_instance VI_1 {
         chk_apache  # отслеживаем состояние скрипта
         }
 }
-
+```
 
 <img width="1585" height="812" alt="image" src="https://github.com/user-attachments/assets/da59c6b1-bd0c-40dc-8d86-5ae2f1f3d29c" />
-```
+
